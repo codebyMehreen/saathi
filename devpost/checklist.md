@@ -10,7 +10,7 @@ Build mode: fast (Mehreen asked the agent to carry on by itself; hands-on checkp
 
 ## Slices
 
-- [ ] **1. A bill photo becomes a payment card**
+- [x] **1. A bill photo becomes a payment card**
   Becomes usable: Open the app, tap a sample bill or attach a photo, and Saathi replies in the customer's language with a filled payment card (nothing paid yet).
   Why now: This is the kernel and the biggest risk (can Gemini read a bill photo correctly?). Scaffold, store, agent and card all come in with it.
   PRD ref: `prd.md > The Core Journey` (steps 1-4), `prd.md > Reading a bill or request`, `prd.md > Preparing the payment card`
@@ -20,7 +20,7 @@ Build mode: fast (Mehreen asked the agent to carry on by itself; hands-on checkp
   Learner check: Open http://localhost:5173, tap "Try a sample bill → Electricity", and check the card matches the bill.
   Commit: `A bill photo becomes a ready-to-approve payment card`
 
-- [ ] **2. Approve, officer review and live status**
+- [x] **2. Approve, officer review and live status**
   Becomes usable: Approve pays small bills with a receipt and lowers the balance; large ones wait on the Officer desk, where Approve/Reject updates the customer's card within seconds.
   Why now: Completes the human-approval loop, the second half of the kernel.
   PRD ref: `prd.md > Customer approval`, `prd.md > Officer review`, `prd.md > The Core Journey` (steps 5-7)
@@ -30,7 +30,7 @@ Build mode: fast (Mehreen asked the agent to carry on by itself; hands-on checkp
   Learner check: Approve the electricity bill, then approve the fee challan, switch to Officer desk and approve it; watch the customer card turn green.
   Commit: `Customers approve payments and an officer reviews large ones`
 
-- [ ] **3. Activity log with reasons, masking and demo polish**
+- [x] **3. Activity log with reasons, masking and demo polish**
   Becomes usable: The Activity log tab shows every step with actor and reason, all numbers masked; Reset demo works; README explains how to run it.
   Why now: Explainability is the last part of the kernel and the thing the video ends on.
   PRD ref: `prd.md > Activity log`, `prd.md > States and Boundaries`
@@ -62,3 +62,9 @@ Reflection:
 Activity mode:
 
 ## Revisions
+
+- Slices 1–3 were written in one pass and committed together, then verified slice by slice (unit tests for rules and masking, an API journey test, and the browser run with real Gemini) — the server routes and rules were small enough that splitting the commit added nothing.
+- Masking no longer hides dates — the first real Gemini run logged "due ••••1024": an ISO date looked like a long number.
+- Generic number masking no longer spans spaces — a test showed "0412345678 2,350" being merged into one number, which would have hidden the amount.
+- Typed numbers go to Gemini as placeholders ([NUM1]) and are restored by the server — needed so "mask before the AI" (scope) still lets a typed reference reach the payment card.
+- Urdu status messages wrap amounts, biller names and receipts in left-to-right isolates — "PKR 85,000" at the start of an Urdu sentence displayed scrambled.

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1240" viewBox="0 0 900 1240" font-family="Arial, Helvetica, sans-serif">
+  <rect width="900" height="1240" fill="#fbfaf5"/>
+  <rect x="30" y="30" width="840" height="1180" fill="none" stroke="#1f3b73" stroke-width="3"/>
+  <rect x="30" y="30" width="840" height="120" fill="#1f3b73"/>
+  <circle cx="100" cy="90" r="40" fill="#f2c230"/>
+  <path d="M104 58 L84 96 H100 L94 124 L118 82 H101 Z" fill="#1f3b73"/>
+  <text x="160" y="85" font-size="34" font-weight="bold" fill="#fff">CHENAB ELECTRIC SUPPLY CO.</text>
+  <text x="160" y="122" font-size="20" fill="#dbe4f5">Electricity Bill · Domestic (A-1)</text>
+  <text x="450" y="190" font-size="20" fill="#b42318" font-weight="bold" text-anchor="middle">SAMPLE BILL — FICTIONAL COMPANY, FOR DEMO ONLY</text>
+
+  <g font-size="22" fill="#222">
+    <text x="60" y="250" fill="#555">REFERENCE NO.</text>
+    <text x="60" y="290" font-size="34" font-weight="bold" letter-spacing="2">07 13241 0567800</text>
+    <text x="520" y="250" fill="#555">BILL MONTH</text>
+    <text x="520" y="290" font-size="30" font-weight="bold">SEP 2026</text>
+
+    <line x1="60" y1="320" x2="840" y2="320" stroke="#ccc" stroke-width="2"/>
+
+    <text x="60" y="365" fill="#555">NAME &amp; ADDRESS</text>
+    <text x="60" y="400" font-weight="bold">AYESHA RAZA</text>
+    <text x="60" y="432">House 14, Street 6, Gulberg Colony</text>
+    <text x="60" y="464">Faisalabad</text>
+
+    <text x="520" y="365" fill="#555">READING DATE</text>
+    <text x="520" y="400">02-Oct-2026</text>
+    <text x="520" y="440" fill="#555">ISSUE DATE</text>
+    <text x="520" y="472">05-Oct-2026</text>
+
+    <line x1="60" y1="500" x2="840" y2="500" stroke="#ccc" stroke-width="2"/>
+
+    <text x="60" y="545" fill="#555">METER NO.</text><text x="300" y="545">FE-448210</text>
+    <text x="60" y="582" fill="#555">PREVIOUS READING</text><text x="300" y="582">18,402</text>
+    <text x="60" y="619" fill="#555">PRESENT READING</text><text x="300" y="619">18,689</text>
+    <text x="60" y="656" fill="#555">UNITS CONSUMED</text><text x="300" y="656" font-weight="bold">287</text>
+
+    <text x="520" y="545" fill="#555">ENERGY CHARGES</text><text x="840" y="545" text-anchor="end">6,315</text>
+    <text x="520" y="582" fill="#555">FUEL ADJUSTMENT</text><text x="840" y="582" text-anchor="end">574</text>
+    <text x="520" y="619" fill="#555">GST</text><text x="840" y="619" text-anchor="end">1,171</text>
+    <text x="520" y="656" fill="#555">TV FEE &amp; OTHERS</text><text x="840" y="656" text-anchor="end">390</text>
+
+    <line x1="60" y1="690" x2="840" y2="690" stroke="#ccc" stroke-width="2"/>
+  </g>
+
+  <rect x="60" y="720" width="380" height="170" fill="#e8f0e3" stroke="#3c7d2e" stroke-width="2"/>
+  <text x="250" y="765" font-size="22" fill="#3c7d2e" text-anchor="middle" font-weight="bold">PAYABLE WITHIN DUE DATE</text>
+  <text x="250" y="830" font-size="52" font-weight="bold" fill="#111" text-anchor="middle">Rs. 8,450</text>
+  <text x="250" y="870" font-size="22" fill="#333" text-anchor="middle">DUE DATE: 24-Oct-2026</text>
+
+  <rect x="460" y="720" width="380" height="170" fill="#fbe9e7" stroke="#b42318" stroke-width="2"/>
+  <text x="650" y="765" font-size="22" fill="#b42318" text-anchor="middle" font-weight="bold">PAYABLE AFTER DUE DATE</text>
+  <text x="650" y="830" font-size="52" font-weight="bold" fill="#111" text-anchor="middle">Rs. 9,295</text>
+  <text x="650" y="870" font-size="22" fill="#333" text-anchor="middle">LATE PAYMENT SURCHARGE</text>
+
+  <g font-size="18" fill="#555">
+    <text x="60" y="950">Units history: Aug 301 · Jul 344 · Jun 362 · May 298 · Apr 211</text>
+    <text x="60" y="985">Pay at any bank branch, ATM, mobile banking or post office using the reference number.</text>
+    <text x="60" y="1020">Helpline 0800-00000 (fictional)</text>
+  </g>
+  <g fill="#111">
+    <rect x="60" y="1070" width="4" height="90"/><rect x="70" y="1070" width="2" height="90"/><rect x="78" y="1070" width="6" height="90"/>
+    <rect x="90" y="1070" width="2" height="90"/><rect x="98" y="1070" width="4" height="90"/><rect x="108" y="1070" width="2" height="90"/>
+    <rect x="116" y="1070" width="6" height="90"/><rect x="128" y="1070" width="2" height="90"/><rect x="134" y="1070" width="4" height="90"/>
+    <rect x="144" y="1070" width="2" height="90"/><rect x="152" y="1070" width="6" height="90"/><rect x="164" y="1070" width="4" height="90"/>
+    <rect x="174" y="1070" width="2" height="90"/><rect x="182" y="1070" width="6" height="90"/><rect x="194" y="1070" width="2" height="90"/>
+    <rect x="202" y="1070" width="4" height="90"/><rect x="212" y="1070" width="2" height="90"/><rect x="220" y="1070" width="6" height="90"/>
+  </g>
+  <text x="840" y="1150" font-size="18" fill="#555" text-anchor="end">Bank copy / Consumer copy</text>
+</svg>

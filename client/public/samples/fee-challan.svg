@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200" font-family="Arial, Helvetica, sans-serif">
+  <rect width="900" height="1200" fill="#fdfdfb"/>
+  <rect x="30" y="30" width="840" height="1140" fill="none" stroke="#5b2a86" stroke-width="3"/>
+  <rect x="30" y="30" width="840" height="130" fill="#5b2a86"/>
+  <rect x="62" y="55" width="80" height="80" rx="10" fill="#fff"/>
+  <text x="102" y="108" font-size="34" font-weight="bold" fill="#5b2a86" text-anchor="middle">LIT</text>
+  <text x="170" y="92" font-size="32" font-weight="bold" fill="#fff">LYALLPUR INSTITUTE OF TECHNOLOGY</text>
+  <text x="170" y="130" font-size="21" fill="#e6dcf2">Fee Challan · Fall 2026 Semester</text>
+  <text x="450" y="200" font-size="20" fill="#b42318" font-weight="bold" text-anchor="middle">SAMPLE CHALLAN — FICTIONAL INSTITUTE, FOR DEMO ONLY</text>
+
+  <g font-size="22" fill="#222">
+    <text x="60" y="260" fill="#555">CHALLAN NO.</text>
+    <text x="60" y="300" font-size="34" font-weight="bold" letter-spacing="2">2026-0918-3374</text>
+    <text x="540" y="260" fill="#555">ISSUE DATE</text>
+    <text x="540" y="300" font-size="28">10-Oct-2026</text>
+
+    <line x1="60" y1="330" x2="840" y2="330" stroke="#ccc" stroke-width="2"/>
+
+    <text x="60" y="375" fill="#555">STUDENT NAME</text><text x="320" y="375" font-weight="bold">AYESHA RAZA</text>
+    <text x="60" y="412" fill="#555">ROLL NO.</text><text x="320" y="412">BSCS-24-117</text>
+    <text x="60" y="449" fill="#555">PROGRAM</text><text x="320" y="449">BS Computer Science · Semester 5</text>
+
+    <line x1="60" y1="480" x2="840" y2="480" stroke="#ccc" stroke-width="2"/>
+
+    <text x="60" y="525" font-weight="bold">PARTICULARS</text><text x="840" y="525" text-anchor="end" font-weight="bold">AMOUNT (PKR)</text>
+    <text x="60" y="565">Tuition Fee</text><text x="840" y="565" text-anchor="end">72,000</text>
+    <text x="60" y="602">Laboratory Fee</text><text x="840" y="602" text-anchor="end">6,500</text>
+    <text x="60" y="639">Library &amp; IT Services</text><text x="840" y="639" text-anchor="end">3,500</text>
+    <text x="60" y="676">Examination Fee</text><text x="840" y="676" text-anchor="end">3,000</text>
+    <line x1="60" y1="700" x2="840" y2="700" stroke="#999" stroke-width="2"/>
+    <text x="60" y="740" font-weight="bold">TOTAL</text><text x="840" y="740" text-anchor="end" font-weight="bold">85,000</text>
+  </g>
+
+  <rect x="60" y="780" width="380" height="170" fill="#ede6f6" stroke="#5b2a86" stroke-width="2"/>
+  <text x="250" y="825" font-size="22" fill="#5b2a86" text-anchor="middle" font-weight="bold">PAYABLE BY DUE DATE</text>
+  <text x="250" y="890" font-size="50" font-weight="bold" fill="#111" text-anchor="middle">Rs. 85,000</text>
+  <text x="250" y="930" font-size="22" fill="#333" text-anchor="middle">DUE DATE: 30-Oct-2026</text>
+
+  <rect x="460" y="780" width="380" height="170" fill="#fbe9e7" stroke="#b42318" stroke-width="2"/>
+  <text x="650" y="825" font-size="22" fill="#b42318" text-anchor="middle" font-weight="bold">AFTER DUE DATE</text>
+  <text x="650" y="890" font-size="50" font-weight="bold" fill="#111" text-anchor="middle">Rs. 86,500</text>
+  <text x="650" y="930" font-size="22" fill="#333" text-anchor="middle">incl. late fee Rs. 1,500</text>
+
+  <g font-size="18" fill="#555">
+    <text x="60" y="1010">Payable at any branch of a scheduled bank or through mobile banking using the challan number.</text>
+    <text x="60" y="1045">Fee once paid is non-refundable. Keep the bank-stamped copy.</text>
+  </g>
+  <text x="60" y="1130" font-size="18" fill="#555">Student copy</text>
+  <text x="840" y="1130" font-size="18" fill="#555" text-anchor="end">Bank stamp: ____________</text>
+</svg>

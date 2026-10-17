@@ -1,0 +1,15 @@
+{
+  "name": "saathi",
+  "private": true,
+  "description": "Saathi: an AI banking assistant that prepares bill payments and waits for a person to approve them.",
+  "workspaces": ["server", "client"],
+  "scripts": {
+    "dev": "concurrently -n server,client -c green,cyan \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client",
+    "start": "npm start -w server",
+    "test": "npm test -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
