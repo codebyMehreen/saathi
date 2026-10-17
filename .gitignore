@@ -1,0 +1,15 @@
+# Personal learning context stays out of commits
+/devpost/learner-profile.md
+
+# Secrets: never commit keys. .env.example (no secrets) is allowed.
+.env
+.env.*
+!.env.example
+
+node_modules/
+dist/
+
+# Devpost skill pack copies (installed by `npx skills add`; skills-lock.json records them)
+/.agents/
+/agent/
+/.claude/
