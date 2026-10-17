@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saathi App Map</title>
+<style>
+  :root { --bg:#f1f5f9; --card:#fff; --ink:#1e293b; --muted:#64748b; --brand:#0f766e; --amber:#b45309; --line:#cbd5e1; --code:#f8fafc; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --muted:#94a3b8; --brand:#2dd4bf; --amber:#fbbf24; --line:#334155; --code:#0f172a; } }
+  :root[data-theme="dark"] { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --muted:#94a3b8; --brand:#2dd4bf; --amber:#fbbf24; --line:#334155; --code:#0f172a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.7rem; margin: 0 0 4px; }
+  h2 { font-size: 1.15rem; margin: 32px 0 10px; }
+  p.lead { color: var(--muted); margin-top: 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin: 10px 0; }
+  code { background: var(--code); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; font-size: .9em; }
+  .stop { display: grid; grid-template-columns: 34px 1fr; gap: 12px; }
+  .num { width: 30px; height: 30px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-weight: 700; }
+  svg { width: 100%; height: auto; }
+  svg text { fill: var(--ink); font: 13px system-ui, sans-serif; }
+  svg .box { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
+  svg .ai { stroke: var(--brand); }
+  svg .rule { stroke: var(--amber); }
+  svg .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; marker-end: url(#a); }
+  svg .small { fill: var(--muted); font-size: 11px; }
+  ul { padding-left: 20px; }
+  details summary { cursor: pointer; font-weight: 600; }
+  .muted { color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Saathi App Map</h1>
+  <p class="lead">A take-home guide to where things live in Saathi. Snapshot of the code at commit <code>021591a</code>; it can drift as the code changes.</p>
+
+  <h2>The app in one paragraph</h2>
+  <div class="card">
+    The <strong>web page</strong> (<code>client/</code>, React + Tailwind) shows the customer's phone on the left and the bank side on the right.
+    The <strong>server</strong> (<code>server/</code>, Express) keeps a fictional bank in memory. When a bill photo arrives, the server asks
+    <strong>Gemini</strong> to read it and give a reason, then the server's own <strong>rules</strong> decide the amount, check balance and duplicates,
+    and wait for the customer's Approve. Anything above PKR 25,000 waits for a bank officer. Every step goes into the activity log, masked.
+  </div>
+
+  <h2>One action, followed through the code: "send a bill photo"</h2>
+  <svg viewBox="0 0 820 230" role="img" aria-label="Diagram: the bill photo goes from the page to the server, to Gemini and back, then through the rules to a payment card">
+    <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+    <rect class="box" x="10" y="20" width="170" height="70" rx="10"/>
+    <text x="22" y="45">ChatInput.jsx</text><text class="small" x="22" y="64">photo → canvas → JPEG</text><text class="small" x="22" y="80">POST /api/chat</text>
+    <rect class="box" x="230" y="20" width="170" height="70" rx="10"/>
+    <text x="242" y="45">app.js handleChat</text><text class="small" x="242" y="64">logs the request</text><text class="small" x="242" y="80">masks typed numbers</text>
+    <rect class="box ai" x="450" y="20" width="170" height="70" rx="10"/>
+    <text x="462" y="45">agent.js askSaathi</text><text class="small" x="462" y="64">Gemini reads the bill</text><text class="small" x="462" y="80">language, fields, reason</text>
+    <rect class="box rule" x="450" y="140" width="170" height="70" rx="10"/>
+    <text x="462" y="165">rules.js preparePayment</text><text class="small" x="462" y="184">amount, balance,</text><text class="small" x="462" y="200">duplicates. No money moves.</text>
+    <rect class="box" x="230" y="140" width="170" height="70" rx="10"/>
+    <text x="242" y="165">PaymentCard.jsx</text><text class="small" x="242" y="184">card + Why line</text><text class="small" x="242" y="200">Approve / Cancel</text>
+    <rect class="box rule" x="10" y="140" width="170" height="70" rx="10"/>
+    <text x="22" y="165">rules.js</text><text class="small" x="22" y="184">onCustomerApprove:</text><text class="small" x="22" y="200">pay, or officer review</text>
+    <path class="arrow" d="M180 55 H226"/><path class="arrow" d="M400 55 H446"/><path class="arrow" d="M535 90 V136"/>
+    <path class="arrow" d="M450 175 H404"/><path class="arrow" d="M230 175 H184"/>
+    <text class="small" x="640" y="45">Gemini only reads and explains.</text><text class="small" x="640" y="62">Fixed code makes every money</text><text class="small" x="640" y="79">decision (amber boxes).</text>
+  </svg>
+
+  <h2>Reference route (3 stops)</h2>
+  <p class="muted">A reference route prepared from the finished code; not yet toured together.</p>
+  <div class="card stop"><div class="num">1</div><div>
+    <strong><code>client/src/components/ChatInput.jsx</code></strong>, function <code>attach</code> and <code>send</code>.
+    The photo (or a sample bill from <code>client/public/samples/</code>) goes through <code>prepareImage</code> in <code>client/src/lib/image.js</code>, which shrinks it and strips camera metadata, then is posted to <code>/api/chat</code>.
+  </div></div>
+  <div class="card stop"><div class="num">2</div><div>
+    <strong><code>server/src/agent.js</code></strong>, function <code>askSaathi</code> (search <code>SCHEMA</code> and <code>instructions</code>).
+    Builds the prompt, swaps typed numbers for <code>[NUM1]</code> placeholders (<code>tokenize</code> in <code>server/src/mask.js</code>), and asks Gemini for JSON in a fixed shape. Without a key it uses <code>server/src/samples.js</code> (demo mode).
+  </div></div>
+  <div class="card stop"><div class="num">3</div><div>
+    <strong><code>server/src/rules.js</code></strong>, functions <code>preparePayment</code>, <code>onCustomerApprove</code>, <code>review</code>, <code>execute</code>.
+    The only code that decides about money: late amount if overdue, balance, duplicates, the <code>approvalLimit()</code> (PKR 25,000), and the mock payment with a receipt. Each step calls <code>addLog</code> with a reason.
+  </div></div>
+
+  <h2>To change this, start here</h2>
+  <ul>
+    <li>The approval limit: <code>APPROVAL_LIMIT</code> in <code>.env</code>, or <code>approvalLimit</code> in <code>server/src/rules.js</code>.</li>
+    <li>What Saathi is told to do: the <code>instructions</code> text in <code>server/src/agent.js</code>.</li>
+    <li>What the customer is told after a decision: <code>server/src/messages.js</code> (English, Roman Urdu, Urdu).</li>
+    <li>The customer and starting balance: <code>fresh()</code> in <code>server/src/store.js</code>.</li>
+    <li>Colours and card layout: <code>client/src/components/PaymentCard.jsx</code> (<code>STATUS</code>).</li>
+    <li>The bank side: <code>client/src/components/OfficerDesk.jsx</code> and <code>ActivityLog.jsx</code>.</li>
+  </ul>
+
+  <h2>A practice to reuse</h2>
+  <div class="card">
+    <strong>Let the AI explain, let code decide, and test the code without the AI.</strong>
+    The PRD's product decision ("The AI reads and explains; fixed code decides limits, balance, duplicates and execution") became
+    <code>server/src/rules.js</code>, which <code>server/test/rules.test.js</code> and <code>server/test/api.test.js</code> check with no AI call at all
+    (17 tests, <code>npm test</code>). The first real Gemini run then found a gap the tests had missed: dates were being masked as if they were account numbers.
+    That became a new test in <code>server/test/mask.test.js</code>. On another project, the same split works for anything an AI prepares and a person must approve:
+    keep the decision in plain, tested code, and log the AI's reason next to it.
+  </div>
+
+  <h2>Run it again</h2>
+  <div class="card">
+    <code>npm install</code>, copy <code>.env.example</code> to <code>.env</code> and add <code>GEMINI_API_KEY</code>, then <code>npm run dev</code> and open
+    <code>http://localhost:5173</code>. <code>npm test</code> runs the checks. Without a key it runs in labelled demo mode.
+  </div>
+</main>
+</body>
+</html>

@@ -53,13 +53,13 @@ Build mode: fast (Mehreen asked the agent to carry on by itself; hands-on checkp
 
 - [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
 - [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse (generated and paths checked against the code at 021591a; not yet shown to Mehreen)
 
-Activity and evidence:
-Route and stops:
-Edit outcome:
-Reflection:
-Activity mode:
+Activity and evidence: not done yet. Mehreen delegated the build; the wrap-up waits for her (about 3 minutes, before recording).
+Route and stops: reference route prepared in app-map.html: ChatInput.jsx send/attach → server/src/agent.js askSaathi → server/src/rules.js preparePayment / onCustomerApprove.
+Edit outcome: not applicable yet.
+Reflection: not offered yet.
+Activity mode: pending.
 
 ## Revisions
 
