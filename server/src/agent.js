@@ -91,25 +91,35 @@ export async function askSaathi({ text, image, sample, customer }) {
   const parts = [{ text: instructions({ customer, today, hasImage: Boolean(image), text: safeText }) }];
   if (image) parts.push({ inlineData: { mimeType: image.mimeType, data: image.data } });
 
+  const body = JSON.stringify({
+    contents: [{ parts }],
+    generationConfig: { temperature: 0.2, responseMimeType: 'application/json', responseSchema: SCHEMA },
+  });
+
+  // Gemini is sometimes briefly overloaded (503) or slow; one quiet retry saves
+  // a live demo. Nothing is prepared until an answer arrives, so retrying is safe.
   let response;
-  try {
-    response = await fetch(`${ENDPOINT}/${model()}:generateContent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY.trim() },
-      body: JSON.stringify({
-        contents: [{ parts }],
-        generationConfig: { temperature: 0.2, responseMimeType: 'application/json', responseSchema: SCHEMA },
-      }),
-      signal: AbortSignal.timeout(45000),
-    });
-  } catch (err) {
-    throw new AgentError(`Could not reach Gemini (${err.name === 'TimeoutError' ? 'timed out' : err.message}).`);
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      response = await fetch(`${ENDPOINT}/${model()}:generateContent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY.trim() },
+        body,
+        signal: AbortSignal.timeout(30000),
+      });
+    } catch (err) {
+      if (attempt < 2) continue;
+      throw new AgentError(`Could not reach Gemini (${err.name === 'TimeoutError' ? 'timed out' : err.message}).`);
+    }
+    if (response.status < 500 || attempt === 2) break;
+    await new Promise((r) => setTimeout(r, Number(process.env.GEMINI_RETRY_MS ?? 1500)));
   }
 
   const payload = await response.json().catch(() => null);
   if (!response.ok) {
     const detail = payload?.error?.message || `HTTP ${response.status}`;
     if (response.status === 429) throw new AgentError('Gemini free allowance is used up for the moment (429).');
+    if (response.status >= 500) throw new AgentError(`Gemini is busy right now (${response.status}), even after a retry.`);
     if (/API key not valid/i.test(detail)) throw new AgentError('The Gemini API key is not valid.');
     throw new AgentError(`Gemini refused the request: ${detail}`);
   }

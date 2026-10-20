@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { maskNumber, maskName, maskText, tokenize, detokenize } from '../src/mask.js';
+import { maskNumber, maskName, maskText, maskNames, tokenize, detokenize } from '../src/mask.js';
 
 test('maskNumber keeps only the last 4 digits', () => {
   assert.equal(maskNumber('0123-4567-8901-4821'), '••••••••4821');
@@ -23,6 +23,11 @@ test('maskText hides CNIC, phone, account and reference numbers but not amounts'
   assert.ok(out.includes('7800'));
   assert.ok(out.includes('PKR 8,450'));
   assert.ok(out.includes('25000'));
+});
+
+test('known full names are shortened in free text, any case', () => {
+  assert.equal(maskNames('Bill for AYESHA RAZA, thanks Ayesha  Raza', ['Ayesha Raza']), 'Bill for Ayesha R., thanks Ayesha R.');
+  assert.equal(maskNames('Ayesha paid', ['Ayesha']), 'Ayesha paid');
 });
 
 test('dates are not masked', () => {

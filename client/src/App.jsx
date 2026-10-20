@@ -63,7 +63,7 @@ export default function App() {
             Saathi <span className="font-normal text-slate-400">· AI banking you approve</span>
           </h1>
           <p className="text-xs text-slate-500">
-            Saathi reads and prepares. The customer approves. An officer reviews anything above PKR {state.limit.toLocaleString('en-US')}.
+            Proof of concept · fictional Saathi Demo Bank, mock accounts, no real money
           </p>
         </div>
         <button
@@ -74,6 +74,23 @@ export default function App() {
           Reset demo
         </button>
       </header>
+
+      <ol className="mx-auto mb-4 grid max-w-6xl grid-cols-2 gap-2 px-4 text-xs sm:grid-cols-4 sm:px-6">
+        {[
+          ['1', 'Saathi reads', 'A bill photo or a message, in Urdu, Roman Urdu or English (Gemini).'],
+          ['2', 'Customer approves', 'Nothing is paid until the customer taps Approve.'],
+          ['3', 'Officer reviews', `Anything above PKR ${state.limit.toLocaleString('en-US')} waits for a bank officer.`],
+          ['4', 'Every step logged', 'Who did what, and why. Numbers and names masked.'],
+        ].map(([n, title, text]) => (
+          <li key={n} className="flex gap-2 rounded-xl bg-white px-3 py-2 shadow-sm ring-1 ring-slate-200">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-teal-700 text-[11px] font-bold text-white">{n}</span>
+            <span>
+              <span className="font-semibold text-slate-800">{title}</span>
+              <span className="hidden text-slate-500 sm:block">{text}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
 
       {error && (
         <p className="mx-auto mb-2 max-w-6xl px-6 text-sm text-rose-600" role="alert">

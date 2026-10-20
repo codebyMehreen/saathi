@@ -6,25 +6,28 @@ import { store, reset, addLog, addMessage, findPayment } from './store.js';
 import { preparePayment, onCustomerApprove, onCustomerCancel, review, approvalLimit, RuleError } from './rules.js';
 import { askSaathi, geminiConfigured, AgentError } from './agent.js';
 import { statusMessage } from './messages.js';
-import { maskNumber, maskName, maskText } from './mask.js';
+import { maskNumber, maskName, maskText, maskNames } from './mask.js';
 
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 // Everything the page sees goes through here, so nothing leaves unmasked.
 export function publicState() {
   const c = store.customer;
+  const names = [c.name, ...store.payments.map((p) => p.customerNameOnBill)];
+  const clean = (text) => maskNames(maskText(text), names);
   return {
     demoMode: !geminiConfigured(),
     limit: approvalLimit(),
     customer: { ...c, accountNumber: maskNumber(c.accountNumber), name: maskName(c.name) },
-    messages: store.messages.map((m) => ({ ...m, text: maskText(m.text) })),
+    messages: store.messages.map((m) => ({ ...m, text: clean(m.text) })),
     payments: store.payments.map((p) => ({
       ...p,
       reference: maskNumber(p.reference),
       customerNameOnBill: maskName(p.customerNameOnBill),
-      officerNote: maskText(p.officerNote),
+      saathiReason: clean(p.saathiReason),
+      officerNote: clean(p.officerNote),
     })),
-    log: store.log.map((e) => ({ ...e, action: maskText(e.action), reason: maskText(e.reason) })),
+    log: store.log.map((e) => ({ ...e, action: clean(e.action), reason: clean(e.reason) })),
   };
 }
 
@@ -62,11 +65,13 @@ async function handleChat(req, res) {
   if (intent === 'pay_bill' && bill?.reference && amount > 0) {
     addLog('saathi', `Read the bill: ${bill.billerName || 'unknown biller'}`, reason);
     const payment = preparePayment(bill, { language, saathiReason: reason });
-    addMessage({ from: 'saathi', text: reply, language, paymentId: payment.id });
+    // The officer reviewing a large payment sees the same photo the customer sent.
+    payment.imageThumb = typeof imageThumb === 'string' ? imageThumb : null;
+    addMessage({ from: 'saathi', text: reply, language, paymentId: payment.id, ai: true });
   } else {
     const why = intent === 'pay_bill' ? `Could not prepare a payment (missing: ${missing.join(', ') || 'details'})` : `Answered (${intent})`;
     addLog('saathi', why, reason);
-    addMessage({ from: 'saathi', text: reply, language });
+    addMessage({ from: 'saathi', text: reply, language, ai: true });
   }
   res.json(publicState());
 }

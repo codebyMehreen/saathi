@@ -3,6 +3,7 @@ import { pkr, datePK, timePK, BILL_TYPE_LABEL } from '../lib/format.js';
 
 function PendingItem({ payment, busy, onReview }) {
   const [note, setNote] = useState('');
+  const [zoom, setZoom] = useState(false);
   return (
     <li className="rounded-2xl border-2 border-amber-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
@@ -15,6 +16,20 @@ function PendingItem({ payment, busy, onReview }) {
         </div>
         <p className="text-xl font-bold whitespace-nowrap text-slate-900">{pkr(payment.amount)}</p>
       </div>
+      {payment.imageThumb && (
+        <button
+          type="button"
+          onClick={() => setZoom((z) => !z)}
+          className="mt-3 block overflow-hidden rounded-xl border border-slate-200"
+          title={zoom ? 'Show smaller' : 'Show the bill larger'}
+        >
+          <img
+            src={payment.imageThumb}
+            alt="The bill photo the customer sent"
+            className={zoom ? 'w-full max-w-sm' : 'h-24 w-24 object-cover object-top'}
+          />
+        </button>
+      )}
       <div className="mt-3 space-y-2 text-xs">
         <p className="rounded-xl bg-slate-50 px-3 py-2 text-slate-600">
           <span className="font-semibold text-teal-800">Saathi read: </span>

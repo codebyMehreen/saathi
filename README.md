@@ -21,7 +21,7 @@ Built for Devpost's [Build With AI: Basics](https://learn-ai-basics.devpost.com/
 | 1 | Attach a bill photo (or tap **Try a sample bill**) and optionally type a message | |
 | 2 | Saathi replies in the customer's language with a payment card: biller, reference (masked), month, due date, amount, account, balance after, and *Why* | Log: customer sent a photo → Saathi read the bill (its reason) → card prepared, nothing paid |
 | 3 | Tap **Approve · منظور کریں** | ≤ PKR 25,000: paid, receipt, balance drops |
-| 4 | Card turns amber: "With a bank officer for review" | > PKR 25,000: appears on the **Officer desk** with Saathi's reason and the routing reason |
+| 4 | Card turns amber: "With a bank officer for review" | > PKR 25,000: appears on the **Officer desk** with the bill photo, Saathi's reason and the routing reason |
 | 5 | Card turns green (or red with the officer's note), and Saathi tells the customer in their language | Officer taps **Approve payment** or **Reject** with a note |
 | 6 | | **Activity log**: every step, actor, and reason |
 
@@ -30,7 +30,7 @@ Also handled: overdue bills use the late amount, a bill already paid or waiting 
 ## Privacy by design
 
 - Typed text is masked **before** it reaches the AI: long numbers become placeholders (`[NUM1]`) and the server puts the real number back afterwards, so Gemini never sees a typed account or reference number.
-- Everything the page shows and everything in the log is masked (last 4 digits only; names shortened to first name + initial).
+- Everything the page shows and everything in the log is masked: last 4 digits only, and known full names shortened to first name + initial, even when they appear inside an AI reply or an officer's note.
 - Photos are re-encoded in the browser (max 1600 px JPEG), which also strips camera metadata such as GPS location.
 - Known gap, by design for a POC: the photo itself is sent to Gemini unredacted. A production version would redact personal fields on-device or with OCR before the AI step.
 
@@ -57,7 +57,7 @@ Optional `.env` settings: `GEMINI_MODEL` (default `gemini-3.5-flash-lite`), `APP
 
 - **client/**: React 19 + Vite + Tailwind CSS 4. One page: the customer's phone on the left, the officer desk and activity log on the right, kept in sync by polling every 2 seconds.
 - **server/**: Node + Express 5, all state in memory (restart or **Reset demo** starts fresh).
-  - `agent.js` asks Gemini (REST `generateContent` with a JSON `responseSchema`) to detect the language, the intent and the bill fields, and to give a one-line reason for the audit log.
+  - `agent.js` asks Gemini (one automatic retry if Gemini is briefly busy) (REST `generateContent` with a JSON `responseSchema`) to detect the language, the intent and the bill fields, and to give a one-line reason for the audit log.
   - `rules.js` is the only place that decides anything about money: amount (on time or late), balance, duplicates, the approval limit and execution.
   - `mask.js` handles masking and the placeholder swap before the AI.
   - `messages.js`: fixed status messages in three languages (no AI involved in telling a customer what happened to their money).

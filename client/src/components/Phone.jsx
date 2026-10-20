@@ -3,6 +3,8 @@ import PaymentCard from './PaymentCard.jsx';
 import ChatInput from './ChatInput.jsx';
 import { pkr, timePK, hasUrdu } from '../lib/format.js';
 
+const LANGUAGE = { english: 'English', roman_urdu: 'Roman Urdu', urdu: 'Urdu' };
+
 function Bubble({ message, children }) {
   const mine = message.from === 'customer';
   const urdu = hasUrdu(message.text);
@@ -23,6 +25,11 @@ function Bubble({ message, children }) {
           </div>
         )}
         {children}
+        {message.ai && LANGUAGE[message.language] && (
+          <span className="mt-1 rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-medium text-teal-700">
+            Replied in {LANGUAGE[message.language]}
+          </span>
+        )}
         {message.at && <span className="mt-1 px-1 text-[10px] text-slate-400">{timePK(message.at)}</span>}
       </div>
     </div>
@@ -59,7 +66,7 @@ export default function Phone({ state, busy, thinking, onSend, onApprove, onCanc
         </div>
       </header>
 
-      <div className="flex-1 space-y-3 overflow-y-auto px-3 py-4">
+      <div className="flex-1 space-y-3 overflow-y-auto px-3 py-4" aria-live="polite">
         <Bubble message={{ from: 'saathi', text: 'Assalam o Alaikum! Send me a photo of a bill or challan, or tell me what to pay. I will prepare it, and nothing is paid until you approve.' }} />
         {messages.map((m) => (
           <Bubble key={m.id} message={m}>

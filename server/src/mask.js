@@ -20,6 +20,19 @@ export function maskName(name) {
   return [parts[0], ...parts.slice(1).map((p) => `${p[0]}.`)].join(' ');
 }
 
+// Full names we know about (the account holder, names read off bills) are
+// shortened wherever they appear in free text, e.g. in an AI reply.
+export function maskNames(text, names) {
+  if (!text) return text;
+  let out = String(text);
+  for (const name of names) {
+    if (!name || !/\s/.test(name.trim())) continue;
+    const pattern = name.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+    out = out.replace(new RegExp(pattern, 'gi'), maskName(name.trim()));
+  }
+  return out;
+}
+
 // CNIC (12345-1234567-1), phone numbers, and any run of 7+ digits, allowing
 // dashes inside ("0123-4567-8901-4821"). Amounts are always
 // written with thousands separators in this app, so they are never caught.

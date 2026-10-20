@@ -47,6 +47,10 @@ Build mode: fast (Mehreen asked the agent to carry on by itself; hands-on checkp
 
 ## Final Review
 
+- [x] Show the bill photo on the officer desk, so the officer can check it against what Saathi read (agent review, 20 Oct; verified in browser)
+- [x] Mask full names inside AI replies, officer notes and the log, not only on the card (agent review; test in mask.test.js, checked with a real note)
+- [x] Retry Gemini once when it is briefly busy or slow (agent review; a real call took 33 s on 20 Oct; tests in agent.test.js)
+- [x] "How it works" strip (reads → approves → officer → logged) and a "Replied in …" chip on Saathi's AI replies, so the video explains itself (agent review; checked at desktop and phone width)
 - [ ] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map

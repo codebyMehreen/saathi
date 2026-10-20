@@ -26,11 +26,12 @@ const tinyImage = { mimeType: 'image/jpeg', data: 'AAAA' };
 test('full journey: bill photo -> card -> approve -> officer review -> log', async () => {
   reset();
   // 1. Electricity bill in Roman Urdu: card prepared, nothing paid.
-  let { body: s } = await post('/chat', { text: 'ye bill pay kar do', image: tinyImage, sample: 'electricity' });
+  let { body: s } = await post('/chat', { text: 'ye bill pay kar do', image: tinyImage, imageThumb: 'data:image/jpeg;base64,THUMB', sample: 'electricity' });
   assert.equal(s.demoMode, true);
   const elec = last(s.payments);
   assert.equal(elec.status, 'awaiting_customer');
   assert.equal(elec.amount, 8450);
+  assert.equal(elec.imageThumb, 'data:image/jpeg;base64,THUMB', 'officer sees the photo');
   assert.equal(last(s.messages).language, 'roman_urdu');
   assert.equal(s.customer.balance, 185000);
 
