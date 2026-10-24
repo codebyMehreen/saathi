@@ -45,13 +45,14 @@ function PendingItem({ payment, busy, onReview }) {
         value={note}
         onChange={(e) => setNote(e.target.value)}
         rows={2}
-        placeholder="Note for the record (shown to the customer if rejected)"
+        placeholder="Note for the record. Required to reject: the customer sees it."
         className="mt-3 w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-amber-500 focus:bg-white"
       />
       <div className="mt-2 grid grid-cols-2 gap-2">
         <button
           onClick={() => onReview(payment.id, 'reject', note)}
-          disabled={busy}
+          disabled={busy || !note.trim()}
+          title={note.trim() ? '' : 'Write a reason first'}
           className="rounded-xl border border-rose-300 px-3 py-2 text-sm font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-50"
         >
           Reject
@@ -81,7 +82,8 @@ export default function OfficerDesk({ state, busy, onReview }) {
       <section>
         <h3 className="mb-1 text-sm font-semibold text-slate-800">Waiting for review</h3>
         <p className="mb-3 text-xs text-slate-500">
-          Payments above {pkr(state.limit)} that the customer approved. Saathi cannot pay these; only you can.
+          Payments the customer approved that are above {pkr(state.limit)}, or past their {pkr(state.dailyLimit)} daily
+          limit. Saathi cannot pay these; only you can.
         </p>
         {pending.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-slate-300 bg-white/60 px-4 py-8 text-center text-sm text-slate-500">

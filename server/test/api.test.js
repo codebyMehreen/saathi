@@ -45,12 +45,16 @@ test('full journey: bill photo -> card -> approve -> officer review -> log', asy
   ({ body: s } = await post('/chat', { text: 'یہ چالان جمع کروا دیں', image: tinyImage, sample: 'challan' }));
   const fee = last(s.payments);
   assert.equal(fee.needsReview, true);
-  ({ body: s } = await post(`/payments/${fee.id}/approve`));
+  // One tap is not enough for PKR 85,000.
+  const oneTap = await post(`/payments/${fee.id}/approve`);
+  assert.equal(oneTap.status, 409);
+  assert.match(oneTap.body.error, /second tap/);
+  ({ body: s } = await post(`/payments/${fee.id}/approve`, { confirmed: true }));
   assert.equal(s.payments.find((p) => p.id === fee.id).status, 'pending_review');
   assert.equal(s.customer.balance, 176550);
 
   // 4. Approving again is refused; the officer approves.
-  const again = await post(`/payments/${fee.id}/approve`);
+  const again = await post(`/payments/${fee.id}/approve`, { confirmed: true });
   assert.equal(again.status, 409);
   ({ body: s } = await post(`/payments/${fee.id}/review`, { decision: 'approve', note: 'Verified' }));
   assert.equal(s.payments.find((p) => p.id === fee.id).status, 'paid');
@@ -77,7 +81,9 @@ test('officer rejection reaches the customer with the note', async () => {
   reset();
   let { body: s } = await post('/chat', { image: tinyImage, sample: 'challan' });
   const fee = last(s.payments);
-  await post(`/payments/${fee.id}/approve`);
+  await post(`/payments/${fee.id}/approve`, { confirmed: true });
+  const noReason = await post(`/payments/${fee.id}/review`, { decision: 'reject', note: '' });
+  assert.equal(noReason.status, 409);
   ({ body: s } = await post(`/payments/${fee.id}/review`, { decision: 'reject', note: 'Please pay at the institute counter' }));
   assert.equal(s.payments[0].status, 'rejected');
   assert.match(last(s.messages).text, /Please pay at the institute counter/);

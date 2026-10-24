@@ -15,6 +15,11 @@ const T = {
     roman_urdu: (p) => `Ho gaya. ${p.billerName} ko ${pkr(p.amount)} ada kar diye gaye. Raseed: ${p.receipt}.`,
     urdu: (p) => `ادائیگی ہو گئی۔ ${ltr(p.billerName)} کو ${upkr(p.amount)} ادا کر دیے گئے۔ رسید: ${ltr(p.receipt)}`,
   },
+  pending_review_daily: {
+    english: (p) => `This would take you past today's self-approval limit, so I've sent ${pkr(p.amount)} to a bank officer. Nothing is paid until they approve.`,
+    roman_urdu: (p) => `Is se aap aaj ki limit se aage nikal jayein ge, is liye ${pkr(p.amount)} bank officer ko review ke liye bhej diya hai. Un ki approval tak koi payment nahin hogi.`,
+    urdu: (p) => `اس سے آپ آج کی حد سے آگے نکل جائیں گے، اس لیے ${upkr(p.amount)} بینک افسر کو جائزے کے لیے بھیج دیے ہیں۔ ان کی منظوری تک ادائیگی نہیں ہوگی۔`,
+  },
   pending_review: {
     english: (p) => `${pkr(p.amount)} is above your self-approval limit, so I've sent it to a bank officer. Nothing is paid until they approve.`,
     roman_urdu: (p) => `${pkr(p.amount)} aap ki limit se zyada hai, is liye bank officer ko review ke liye bhej diya hai. Un ki approval tak koi payment nahin hogi.`,
@@ -38,6 +43,6 @@ const T = {
 };
 
 export function statusMessage(kind, payment, language = 'english') {
-  const byLang = T[kind];
+  const byLang = kind === 'pending_review' && payment?.routingKind === 'daily' ? T.pending_review_daily : T[kind];
   return (byLang[language] || byLang.english)(payment || {});
 }

@@ -12,7 +12,7 @@ async function call(path, body) {
 export const api = {
   state: () => call('/state'),
   chat: (payload) => call('/chat', payload),
-  approve: (id) => call(`/payments/${id}/approve`, {}),
+  approve: (id, confirmed = false) => call(`/payments/${id}/approve`, { confirmed }),
   cancel: (id) => call(`/payments/${id}/cancel`, {}),
   review: (id, decision, note) => call(`/payments/${id}/review`, { decision, note }),
   reset: () => call('/reset', {}),

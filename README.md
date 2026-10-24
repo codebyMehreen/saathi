@@ -8,6 +8,14 @@ Send Saathi a photo of a utility bill or fee challan, or just type what you want
 - **Anything above PKR 25,000 goes to a bank officer**, who approves or rejects it with a note.
 - **Every step is logged with who did it and why**, including the reason Saathi gave, with account and reference numbers masked.
 
+More safety rules, all fixed in the bank's code (`server/src/rules.js`), so the AI cannot argue past them:
+
+- **PKR 10,000 or more takes two taps**: Approve, then "Tap again". The server checks the confirmation too.
+- **A daily limit of PKR 50,000** that a customer can approve alone. A payment that would go past it goes to the officer, however small.
+- **Cards expire after 15 minutes** if nobody approves them, with a countdown on the card.
+- **Warnings on the card**: first payment to a new biller, a name on the bill that isn't the account holder's, a balance that would drop below PKR 5,000. They inform; they don't block.
+- **An officer must give a reason to reject**, because the customer is told it in their own language.
+
 The AI reads and explains; the bank's own code makes every money decision. Saathi can never approve, route or move money on its own.
 
 > Proof of concept with a fictional bank ("Saathi Demo Bank"), a fictional customer and fictional sample bills. No real bank, biller or money is involved.

@@ -21,6 +21,12 @@ export default function App() {
     return () => clearInterval(t);
   }, [refresh]);
 
+  useEffect(() => {
+    if (!error) return undefined;
+    const t = setTimeout(() => setError(''), 6000);
+    return () => clearTimeout(t);
+  }, [error]);
+
   async function run(fn) {
     setBusy(true);
     setError('');
@@ -58,13 +64,20 @@ export default function App() {
         </div>
       )}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 pt-5 pb-3 sm:px-6">
-        <div>
-          <h1 className="text-lg font-bold text-slate-900">
-            Saathi <span className="font-normal text-slate-400">· AI banking you approve</span>
-          </h1>
-          <p className="text-xs text-slate-500">
-            Proof of concept · fictional Saathi Demo Bank, mock accounts, no real money
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-600 to-teal-800 text-lg font-bold text-white shadow-md">
+            S
+          </div>
+          <div>
+            <h1 className="flex flex-wrap items-center gap-x-2 text-lg font-bold text-slate-900">
+              Saathi <span className="urdu text-base font-normal text-teal-700">ساتھی</span>
+              <span className="font-normal text-slate-400">· AI banking you approve</span>
+            </h1>
+            <p className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+              <span className="rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-800">Demo · no real money</span>
+              Fictional Saathi Demo Bank, mock accounts
+            </p>
+          </div>
         </div>
         <button
           onClick={() => run(api.reset)}
@@ -78,8 +91,8 @@ export default function App() {
       <ol className="mx-auto mb-4 grid max-w-6xl grid-cols-2 gap-2 px-4 text-xs sm:grid-cols-4 sm:px-6">
         {[
           ['1', 'Saathi reads', 'A bill photo or a message, in Urdu, Roman Urdu or English (Gemini).'],
-          ['2', 'Customer approves', 'Nothing is paid until the customer taps Approve.'],
-          ['3', 'Officer reviews', `Anything above PKR ${state.limit.toLocaleString('en-US')} waits for a bank officer.`],
+          ['2', 'Customer approves', `Nothing is paid until the customer taps Approve; twice from PKR ${state.confirmFrom.toLocaleString('en-US')}.`],
+          ['3', 'Officer reviews', `Above PKR ${state.limit.toLocaleString('en-US')}, or past PKR ${state.dailyLimit.toLocaleString('en-US')} in a day, a bank officer decides.`],
           ['4', 'Every step logged', 'Who did what, and why. Numbers and names masked.'],
         ].map(([n, title, text]) => (
           <li key={n} className="flex gap-2 rounded-xl bg-white px-3 py-2 shadow-sm ring-1 ring-slate-200">
@@ -93,9 +106,15 @@ export default function App() {
       </ol>
 
       {error && (
-        <p className="mx-auto mb-2 max-w-6xl px-6 text-sm text-rose-600" role="alert">
-          {error}
-        </p>
+        <div className="fixed inset-x-0 top-4 z-50 flex justify-center px-4" role="alert">
+          <div className="flex max-w-md items-start gap-3 rounded-2xl bg-slate-900 px-4 py-3 text-sm text-white shadow-2xl">
+            <span className="mt-0.5 text-amber-300" aria-hidden="true">⚠</span>
+            <span className="flex-1">{error}</span>
+            <button onClick={() => setError('')} className="text-slate-400 hover:text-white" aria-label="Dismiss">
+              ✕
+            </button>
+          </div>
+        </div>
       )}
 
       <main className="mx-auto grid max-w-6xl gap-6 px-4 pb-8 sm:px-6 lg:grid-cols-[400px_1fr]">
@@ -106,7 +125,7 @@ export default function App() {
             busy={busy}
             thinking={thinking}
             onSend={send}
-            onApprove={(id) => run(() => api.approve(id))}
+            onApprove={(id, confirmed) => run(() => api.approve(id, confirmed))}
             onCancel={(id) => run(() => api.cancel(id))}
           />
         </section>

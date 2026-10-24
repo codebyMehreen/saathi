@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { store, reset, addLog, addMessage, findPayment } from './store.js';
-import { preparePayment, onCustomerApprove, onCustomerCancel, review, approvalLimit, RuleError } from './rules.js';
+import { preparePayment, onCustomerApprove, onCustomerCancel, review, approvalLimit, dailyLimit, expireStale, CONFIRM_FROM, RuleError } from './rules.js';
 import { askSaathi, geminiConfigured, AgentError } from './agent.js';
 import { statusMessage } from './messages.js';
 import { maskNumber, maskName, maskText, maskNames } from './mask.js';
@@ -12,12 +12,15 @@ const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 // Everything the page sees goes through here, so nothing leaves unmasked.
 export function publicState() {
+  expireStale();
   const c = store.customer;
   const names = [c.name, ...store.payments.map((p) => p.customerNameOnBill)];
   const clean = (text) => maskNames(maskText(text), names);
   return {
     demoMode: !geminiConfigured(),
     limit: approvalLimit(),
+    dailyLimit: dailyLimit(),
+    confirmFrom: CONFIRM_FROM,
     customer: { ...c, accountNumber: maskNumber(c.accountNumber), name: maskName(c.name) },
     messages: store.messages.map((m) => ({ ...m, text: clean(m.text) })),
     payments: store.payments.map((p) => ({
@@ -105,7 +108,7 @@ export function createApp() {
   app.get('/api/state', (req, res) => res.json(publicState()));
   app.post('/api/chat', handleChat);
 
-  app.post('/api/payments/:id/approve', paymentAction((p) => tellCustomer(onCustomerApprove(p))));
+  app.post('/api/payments/:id/approve', paymentAction((p, body) => tellCustomer(onCustomerApprove(p, { confirmed: body.confirmed === true }))));
   app.post('/api/payments/:id/cancel', paymentAction((p) => tellCustomer(onCustomerCancel(p))));
   app.post('/api/payments/:id/review', paymentAction((p, body) => tellCustomer(review(p, body.decision, body.note))));
 
