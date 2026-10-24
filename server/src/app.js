@@ -6,6 +6,7 @@ import { store, reset, addLog, addMessage, findPayment } from './store.js';
 import { preparePayment, onCustomerApprove, onCustomerCancel, review, approvalLimit, dailyLimit, expireStale, CONFIRM_FROM, RuleError } from './rules.js';
 import { askSaathi, geminiConfigured, AgentError } from './agent.js';
 import { statusMessage } from './messages.js';
+import { sessionState, signIn, signOut, requireCustomer, SessionError } from './session.js';
 import { maskNumber, maskName, maskText, maskNames } from './mask.js';
 
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -21,6 +22,7 @@ export function publicState() {
     limit: approvalLimit(),
     dailyLimit: dailyLimit(),
     confirmFrom: CONFIRM_FROM,
+    session: sessionState(),
     customer: { ...c, accountNumber: maskNumber(c.accountNumber), name: maskName(c.name) },
     messages: store.messages.map((m) => ({ ...m, text: clean(m.text) })),
     payments: store.payments.map((p) => ({
@@ -106,10 +108,25 @@ export function createApp() {
   app.use(express.json({ limit: '8mb' }));
 
   app.get('/api/state', (req, res) => res.json(publicState()));
-  app.post('/api/chat', handleChat);
 
-  app.post('/api/payments/:id/approve', paymentAction((p, body) => tellCustomer(onCustomerApprove(p, { confirmed: body.confirmed === true }))));
-  app.post('/api/payments/:id/cancel', paymentAction((p) => tellCustomer(onCustomerCancel(p))));
+  app.post('/api/session/sign-in', (req, res) => {
+    try {
+      signIn(req.body?.pin);
+    } catch (err) {
+      if (err instanceof SessionError) return res.status(err.status).json({ error: err.message, ...publicState() });
+      throw err;
+    }
+    res.json(publicState());
+  });
+  app.post('/api/session/sign-out', (req, res) => {
+    signOut();
+    res.json(publicState());
+  });
+
+  // The customer's side needs the PIN; the officer desk is the bank's own staff system.
+  app.post('/api/chat', requireCustomer, handleChat);
+  app.post('/api/payments/:id/approve', requireCustomer, paymentAction((p, body) => tellCustomer(onCustomerApprove(p, { confirmed: body.confirmed === true }))));
+  app.post('/api/payments/:id/cancel', requireCustomer, paymentAction((p) => tellCustomer(onCustomerCancel(p))));
   app.post('/api/payments/:id/review', paymentAction((p, body) => tellCustomer(review(p, body.decision, body.note))));
 
   app.post('/api/reset', (req, res) => {

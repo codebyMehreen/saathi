@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import PaymentCard from './PaymentCard.jsx';
 import ChatInput from './ChatInput.jsx';
+import SignIn from './SignIn.jsx';
 import { pkr, timePK, hasUrdu } from '../lib/format.js';
 
 const LANGUAGE = { english: 'English', roman_urdu: 'Roman Urdu', urdu: 'Urdu' };
@@ -36,8 +37,8 @@ function Bubble({ message, children }) {
   );
 }
 
-export default function Phone({ state, busy, thinking, onSend, onApprove, onCancel }) {
-  const { customer, messages, payments, limit } = state;
+export default function Phone({ state, busy, thinking, onSend, onApprove, onCancel, onSignIn, onSignOut }) {
+  const { customer, messages, payments, limit, session } = state;
   const endRef = useRef(null);
   const byId = Object.fromEntries(payments.map((p) => [p.id, p]));
 
@@ -56,16 +57,35 @@ export default function Phone({ state, busy, thinking, onSend, onApprove, onCanc
               <p className="text-[11px] text-teal-100">{customer.bank} · demo</p>
             </div>
           </div>
-          <p className="text-[11px] text-teal-100">{customer.name}</p>
+          {session.signedIn ? (
+            <div className="flex items-center gap-2">
+              <p className="text-[11px] text-teal-100">{customer.name}</p>
+              <button
+                onClick={onSignOut}
+                disabled={busy}
+                className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] text-white hover:bg-white/25"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <span className="flex items-center gap-1 text-[11px] text-teal-100">🔒 Signed out</span>
+          )}
         </div>
+        {session.signedIn && (
         <div className="mt-3 rounded-xl bg-white/10 px-3 py-2">
           <p className="text-[11px] text-teal-100">
             {customer.accountTitle} {customer.accountNumber}
           </p>
           <p className="text-xl font-bold tracking-tight" data-testid="balance">{pkr(customer.balance)}</p>
         </div>
+        )}
       </header>
 
+      {!session.signedIn ? (
+        <SignIn customer={customer} session={session} busy={busy} onSignIn={onSignIn} />
+      ) : (
+      <>
       <div className="flex-1 space-y-3 overflow-y-auto px-3 py-4" aria-live="polite">
         <Bubble message={{ from: 'saathi', text: 'Assalam o Alaikum! Send me a photo of a bill or challan, or tell me what to pay. I will prepare it, and nothing is paid until you approve.' }} />
         {messages.map((m) => (
@@ -100,6 +120,8 @@ export default function Phone({ state, busy, thinking, onSend, onApprove, onCanc
       </div>
 
       <ChatInput busy={busy} onSend={onSend} />
+      </>
+      )}
     </div>
   );
 }

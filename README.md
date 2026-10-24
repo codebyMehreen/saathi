@@ -15,6 +15,7 @@ More safety rules, all fixed in the bank's code (`server/src/rules.js`), so the 
 - **Cards expire after 15 minutes** if nobody approves them, with a countdown on the card.
 - **Warnings on the card**: first payment to a new biller, a name on the bill that isn't the account holder's, a balance that would drop below PKR 5,000. They inform; they don't block.
 - **An officer must give a reason to reject**, because the customer is told it in their own language.
+- **The phone app needs a 4-digit PIN** before Saathi reads a bill or moves money (demo PIN `1234`, shown on the screen). The server checks it, and 3 wrong PINs lock sign-in for 60 seconds. The officer desk stands for the bank's separate staff system, so it has no customer sign-in.
 
 The AI reads and explains; the bank's own code makes every money decision. Saathi can never approve, route or move money on its own.
 

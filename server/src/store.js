@@ -16,6 +16,8 @@ function fresh() {
       balance: STARTING_BALANCE,
       currency: 'PKR',
     },
+    // The phone app starts signed out; see session.js.
+    session: { signedIn: false, failedTries: 0, lockedUntil: null },
     messages: [],
     payments: [],
     log: [],

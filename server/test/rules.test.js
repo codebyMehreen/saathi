@@ -162,3 +162,13 @@ test('an officer cannot reject without a reason', () => {
 test('todayPK is Pakistan time', () => {
   assert.equal(todayPK(new Date('2026-10-24T20:30:00Z')), '2026-10-25');
 });
+
+test('a sign-in lock lifts after 60 seconds', async () => {
+  const { signIn, sessionState, LOCK_MS } = await import('../src/session.js');
+  const t0 = 1_000_000;
+  for (const pin of ['0', '1', '2']) assert.throws(() => signIn(pin, t0));
+  assert.equal(sessionState(t0 + 1000).locked, true);
+  assert.equal(sessionState(t0 + LOCK_MS + 1).locked, false);
+  signIn('1234', t0 + LOCK_MS + 1);
+  assert.equal(store.session.signedIn, true);
+});

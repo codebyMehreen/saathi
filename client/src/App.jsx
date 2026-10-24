@@ -127,6 +127,8 @@ export default function App() {
             onSend={send}
             onApprove={(id, confirmed) => run(() => api.approve(id, confirmed))}
             onCancel={(id) => run(() => api.cancel(id))}
+            onSignIn={(pin) => run(() => api.signIn(pin))}
+            onSignOut={() => run(api.signOut)}
           />
         </section>
 

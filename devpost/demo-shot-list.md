@@ -17,7 +17,7 @@ the learner, so each shot only names the point to make, not a line to read.
 
 | Time | On screen | Do | Point to make (your words) |
 |---|---|---|---|
-| 0:00–0:15 | Whole page: phone left, bank side right | Nothing, or hover the balance | The problem and who it's for: paying bills in the language people actually write; Saathi prepares, people decide. |
+| 0:00–0:15 | Whole page: phone left (sign-in screen), bank side right | Type the PIN `1234`, **Sign in** | The problem and who it's for: paying bills in the language people actually write; Saathi prepares, people decide. |
 | 0:15–0:50 | Phone | Attach the electricity bill photo, type `ye bijli ka bill pay kar do`, send. Wait for the card. | Saathi answered in Roman Urdu because that's how the customer wrote. Point at amount, due date, masked reference, "Why", and "nothing paid yet". |
 | 0:50–1:00 | Phone | Point at the "First payment to…" warning and the 15-minute countdown, then tap **Approve**. | Safety checks before money moves; under the limit it pays in one tap: receipt, balance drops. |
 | 1:00–1:35 | Phone, then Officer desk | **Try a sample bill → University fee challan**, type `یہ فیس چالان جمع کروا دیں`, send. Tap **Approve**, then **Tap again** (PKR 10,000 or more needs two taps): card turns amber. On the right, the Officer desk shows it; type a note, **Approve payment** (Reject only works with a reason). | Above PKR 25,000 the customer's approval isn't enough; the rule is fixed code, not the AI. Watch the customer's card turn green and the Urdu message arrive. |
